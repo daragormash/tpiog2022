@@ -323,13 +323,139 @@ try
 121. Что такое связывание?
 122. Чем «раннее» связывание отличается от «позднего»?
 123. Какие два вида полиморфизма реализованы в С++?
-124. Дайте определение полиморфного класса.
-125. Может ли виртуальная функция быть дружественной функцией класса?
-126. Наследуются ли виртуальные функции?
+124. **Дайте определение полиморфного класса.**  
+
+Класс, в котором есть виртуальные методы
+```c++
+#include <ostream>
+using namespace std;
+class A {
+public:
+virtual void show() {
+cout << «Base class A…» << endl;
+}
+};
+class B : public A {
+public:
+void show() {
+cout << «Derived class B…» <show();
+return ;
+}
+```
+125. **Может ли виртуальная функция быть дружественной функцией класса?**  
+Да,может
+
+126. **Наследуются ли виртуальные функции?**
+
+Да
+```c++
+#include <iostream>
+using namespace std;
+
+class Device {
+    public:
+        Device() {
+            cout << "Device constructor called" << endl;
+        }
+        void turn_on() {
+            cout << "Device is on." << endl;
+        }
+};
+
+class Computer: virtual public Device {
+    public:
+        Computer() {
+            cout << "Computer constructor called" << endl;
+        }
+};
+
+class Monitor: virtual public Device {
+    public:
+        Monitor() {
+            cout << "Monitor constructor called" << endl;
+        }
+};
+
+class Laptop: public Computer, public Monitor {};
+
+int main() {
+    Laptop Laptop_instance;
+    Laptop_instance.turn_on();
+    return 0;
+}
+```
+
 127. Каковы особенности вызова виртуальных функций в конструкторах и деструкторах?
-128. Можно ли сделать виртуальной перегруженную операцию, например, сложение?
-129. Может ли конструктор быть виртуальным? А деструктор?
-130. Как виртуальные функции влияют на размер класса?
+128. **Можно ли сделать виртуальной перегруженную операцию, например, сложение?**
+
+Да,можно
+
+129. **Может ли конструктор быть виртуальным? А деструктор?**
+
+Конструктор не может быть виртуальным, а деструктор может.
+Пример виртуального деструктора:
+```c++
+#include <cstdlib>
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
+class A {
+public:
+    A() { cout << "A()" << endl; }
+    virtual ~A() { cout << "~A()" << endl; }
+};
+
+class B : public A {
+public:
+    B() { cout << "B()" << endl; }
+    ~B() { cout << "~B()" << endl; }
+};
+
+int main()
+{
+    A * pA = new B;
+    delete pA;
+    return EXIT_SUCCESS;
+}
+```
+130. **Как виртуальные функции влияют на размер класса?**
+
+К размеру класса добавляется размер виртуальной таблицы функций
+```c++
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+class A
+{
+    void funcA();
+    int x;
+};
+
+class B
+{
+    virtual void funcB();
+    int y;
+};
+
+#pragma pack(1)
+class C
+{
+    virtual void funcB();
+    int y;
+};
+
+
+int main(int argc, const char * argv[])
+{
+    cout << sizeof(A) << endl;
+    cout << sizeof(B) << endl;
+    cout << sizeof(C) << endl;
+}
+```
 131. Как объявляется «чистая» виртуальная функция?
 132. Дайте определение абстрактного класса.
 133. Наследуются ли чистые виртуальные функции?
